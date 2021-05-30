@@ -19,6 +19,7 @@ const bot = mineflayer.createBot({
   host: process.argv[2],
   port: parseInt(process.argv[3]),
   username: process.argv[4] ? process.argv[4] : 'MineAssist',
+  version: "1.16.5",
 })
 
 bot.loadPlugin(pathfinder);
@@ -78,20 +79,23 @@ bot.on('chat', (username, message) => {
 
   if (username == userName && message == 'place') {
     Say("Placing blocks...")
-    setInterval(() => startClicking(), 1500);
+    setInterval(() => startClicking(), 2000);
     // startClicking()
   }
 })
 
 const onBlockPlace = (error) => console.log(error);
 
-function startClicking() {
-  bot.equip(mcData.itemsByName.acacia_sapling.id, 'hand');
-  bot.placeBlock(blockAt(350, 68, 50), new Vec3(0, 1, 0), onBlockPlace);
+async function startClicking() {
+  await bot.equip(mcData.itemsByName.acacia_sapling.id, 'hand');
+  await bot.placeBlock(blockAt(-276, 67, -69), new Vec3(0, 1, 0), onBlockPlace);
 }
 
 function Say(msg) {
   return setTimeout(() => bot.chat(msg), 1500)
 }
 
+bot.on('kicked', (res) => console.log("kicked :", res))
+bot.on('death', () => console.log("BOT Experienced Death!"))
+bot.on('error', (error) => console.log("ERROR Occured :", error))
 
